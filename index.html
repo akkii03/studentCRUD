@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <title>Students</title>
+</head>
+<body style="color:white; background-color:#1d2630">
+
+      <div class="container mt-5">
+        <div class="text-center">
+            <h1 class="display-5 mb-5"><strong>Students</strong>Information</h1>
+        </div>
+        <div class="main row justify-content-center">
+            <form action="" id="student-form" class="justify-content-center mb-4">
+                <div class="col-8 mb-3 mt-3">
+                    <label for="firstName">First Name</label>
+                    <input class="form-control" id="firstname" type="text"  placeholder="enter first name"/>
+                </div>
+
+                <div class="col-8 mb-3 mt-3">
+                    <label for="lastName">Last Name</label>
+                    <input class="form-control" id="lastname" type="text" placeholder="enter Last name"/>
+                </div>
+
+                <div class="col-8 mb-3 mt-3">
+                    <label for="rollNo">Roll No.</label>
+                    <input class="form-control" id="rollNo" type="text" placeholder="enter your Roll No."/>
+                </div>
+
+                <div class="col-8">
+                    <input type="submit" class="btn btn-success add-btn" value="submit">
+                </div>
+            </form>
+
+            <div class="col-8 mt-5">
+                
+                <table class="table table-dark">
+                    <thead>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Roll No</th>
+                        <th>Actions</th>
+
+                        <tbody id="student-list">
+                            <!-- <tr >
+                                <td style="color:black" >Ayush</td>
+                                <td style="color:black">Indoria</td>
+                                <td style="color:black">03</td>
+                                <td>
+                                    <a href="#" class="btn btn-warning btn-sm edit">Edit</a>
+                                    <a href="#" class="btn btn-danger btn-sm delete">Delete</a>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </thead>
+                  </table>
+            </div>
+        </div>
+      </div>
+      <script>
+
+        var selectedRow = null;
+
+        //show msg to user
+        function showAlert(message,className) {
+            const div = document.createElement("div");
+            div.className = `alert alert-${className}`;
+            div.appendChild(document.createTextNode(message));
+            const container = document.querySelector('.container');
+            const main = document.querySelector('.main');
+            container.insertBefore(div,main);
+
+            setTimeout(()=>document.querySelector('.alert').remove(),3000);
+        }
+
+
+        // clear all fields
+
+        function clearFields() {
+            document.querySelector("#firstname").value="";
+            document.querySelector("#lastname").value="";
+            document.querySelector("#rollNo").value="";
+        }
+
+
+        // add data
+
+        document.querySelector("#student-form").addEventListener("submit",(e)=>{
+            e.preventDefault();
+            const firstName = document.getElementsByTagName("input")[0].value;
+            const lastName = document.getElementsByTagName("input")[1].value;
+            const RollN0 = document.getElementsByTagName("input")[2].value;
+
+            if(firstName=="" || lastName =="" || RollN0=="") {
+                showAlert("all fields are mandatory","danger");
+            }
+            else {
+                if(selectedRow==null) {
+                    const list = document.querySelector("#student-list");
+                    const row = document.createElement("tr");
+                    row.innerHTML= `<td >${firstName}</td>
+                                    <td >${lastName}</td>
+                                    <td >${RollN0}</td>
+                                    <td>
+                                    <a href="#" class="btn btn-warning btn-sm edit">Edit</a>
+                                    <a href="#" class="btn btn-danger btn-sm delete">Delete</a>
+                                    </td>`;
+                    list.append(row);
+                    selectedRow = null;
+                    showAlert("student Added","success")
+                }
+                else{
+                    selectedRow.children[0].textContent = firstName;
+                    selectedRow.children[1].textContent = lastName;
+                    selectedRow.children[2].textContent = RollN0;
+                    selectedRow = null;
+                    showAlert("Student edited","warning");
+                }
+                clearFields();
+            }
+        })
+
+
+        //edit data
+
+        document.querySelector("#student-list"),addEventListener("click",(e)=>{
+            if(e.target.classList.contains("edit")) {
+                selectedRow = e.target.parentElement.parentElement;
+                document.getElementsByTagName("input")[0].value = selectedRow.children[0].textContent;
+                document.getElementsByTagName("input")[1].value = selectedRow.children[1].textContent;
+                document.getElementsByTagName("input")[2].value = selectedRow.children[2].textContent;
+               
+            }
+        })
+
+
+
+
+        // Delete data
+        document.querySelector('#student-list').addEventListener('click',(e)=>{
+            const target = e.target;
+            if(target.classList.contains('delete')) {
+                target.parentElement.parentElement.remove();
+                showAlert("Student data deleted","danger")
+            }
+            else{
+
+            }
+        })
+
+
+         
+      </script>
+</body>
+</html>
